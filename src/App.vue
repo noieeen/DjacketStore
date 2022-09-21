@@ -18,7 +18,29 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div class="navbar-menu" id="navbar-menu" v-bind:class="{'is-active':showMobileMenu}">
+      <div
+        class="navbar-menu"
+        id="navbar-menu"
+        v-bind:class="{ 'is-active': showMobileMenu }"
+      >
+      <div class="navbar-start">
+        <div class="navbar-item">
+          <form method="get" action="/search">
+            <div class="field has-addons">
+              <div class="control">
+                <input type="text" class="input" placeholder="Search" name="query">
+              </div>
+              <div class="control">
+                <button class="button is-info">
+                  <span class="icon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
         <div class="navbar-end">
           <router-link to="/summer" class="navbar-item">Summer</router-link>
           <router-link to="/winter" class="navbar-item">Winter</router-link>
@@ -31,7 +53,7 @@
 
               <router-link to="/cart" class="button is-success">
                 <span class="icon"> <i class="fas fa-shopping-cart"></i></span>
-                <span>Cart({{cartTotalLength}})</span>
+                <span>Cart({{ cartTotalLength }})</span>
               </router-link>
             </div>
           </div>
@@ -39,9 +61,12 @@
       </div>
     </nav>
 
-  <div class="is-loading-bar has-text-centered" v-bind:class="{'is-loading':$store.state.isLoading}">
-    <div class="lds-dual-ring"></div>
-  </div>
+    <div
+      class="is-loading-bar has-text-centered"
+      v-bind:class="{ 'is-loading': $store.state.isLoading }"
+    >
+      <div class="lds-dual-ring"></div>
+    </div>
 
     <section class="section">
       <router-view />
@@ -54,44 +79,46 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      return {
-        showMobileMenu:false,
-        cart:{
-          items:[]
-        }
+export default {
+  data() {
+    return {
+      showMobileMenu: false,
+      cart: {
+        items: [],
+      },
+    };
+  },
+  beforeCreate() {
+    this.$store.commit("initializeStore");
+  },
+  mounted() {
+    this.cart = this.$store.state.cart;
+  },
+  computed: {
+    cartTotalLength() {
+      let totalLength = 0;
+
+      for (let index = 0; index < this.cart.items.length; index++) {
+        totalLength += this.cart.items[index].quantity;
       }
-    },beforeCreate(){
-      this.$store.commit('initializeStore')
-    },mounted(){
-      this.cart = this.$store.state.cart
+
+      return totalLength;
     },
-    computed:{
-      cartTotalLength(){
-        let totalLength = 0
-
-        for (let index = 0;index<this.cart.items.length;index++){
-          totalLength += this.cart.items[index].quantity
-        }
-
-        return totalLength
-      }
-    }
-  }
+  },
+};
 </script>
 
 <style lang="scss">
 @import "../node_modules/bulma";
 
-.lds-dual-ring{
+.lds-dual-ring {
   display: inline-block;
   width: 80px;
   height: 80px;
 }
 
-.lds-dual-ring:after{
-  content:'';
+.lds-dual-ring:after {
+  content: "";
   width: 64px;
   height: 64px;
   margin: 8px;
@@ -101,24 +128,24 @@
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
-@keyframes lds-dual-ring{
-  0%{
+@keyframes lds-dual-ring {
+  0% {
     transform: rotate(0deg);
   }
-  100%{
+  100% {
     transform: rotate(360deg);
   }
 }
 
-.is-loading-bar{
+.is-loading-bar {
   height: 0;
   overflow: hidden;
 
   -webkit-transform: all 0.3s;
   transform: all 0.3s;
 
-  &.is-loading{
-    height:80px;
+  &.is-loading {
+    height: 80px;
   }
 }
 </style>
