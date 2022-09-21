@@ -49,6 +49,8 @@ export default {
   },
   mounted(){
     this.getLastestProducts()
+
+    document.title = 'Home | Django Store'
   },
   methods:{
     getLastestProducts(){
