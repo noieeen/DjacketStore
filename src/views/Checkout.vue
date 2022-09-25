@@ -29,7 +29,7 @@
             <tr>
               <td colspan="2">Total</td>
               <td>{{ cartTotalLength }}</td>
-              <td>{{ cartTotalPrice.toFixed(2) }}</td>
+              <td>${{ cartTotalPrice.toFixed(2) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -66,7 +66,7 @@
             <div class="field">
               <label for="">Phone*</label>
               <div class="control">
-                <input type="number" class="input" v-model="phone" />
+                <input type="number" class="input" maxlength="10" v-model="phone" />
               </div>
             </div>
           </div>
@@ -101,6 +101,8 @@
         <hr />
 
         <div id="card-element" class="column is-6 mb-5"></div>
+            <!-- Used to display Element errors. -->
+        <div id="card-errors" role="alert"></div>
           <template v-if="cartTotalLength">
             <hr />
             <button class="button is-dark" @click="submitForm">
@@ -142,7 +144,7 @@ export default {
     this.cart = this.$store.state.cart;
 
     if(this.cartTotalLength>0){
-        this.stripe = Stripe('pk_test_9aqhJp9UZB19ZvYUdzuNCSpx00gRdC7y9J')
+        this.stripe = Stripe('pk_test_51LlyLZFOGO7J1192Okwoe4f8ihvtcmm9cidVqRRK7mMIfudQJOdRou2vjRLRZDO53vkha17eJ5hqbXXqacWH5QfI005sBg17NI')
         const  elements = this.stripe.elements();
         this.card = elements.create('card',{hidePostalCode:true});
         this.card.mount('#card-element')
@@ -191,10 +193,10 @@ export default {
                 this.$store.commit('setIsLoading',false);
 
                 this.errors.push('Something went wrong with Stripe. Please try again.')
-
                 console.log(result.error.message)
             }else{
                 this.stripeTokenHandler(result.token)
+                console.log(result.token)
             }
         })
 
@@ -223,6 +225,8 @@ export default {
                 'items': items,
                 'stripe_token': token.id
             }
+
+            console.log('data>>',data)
             await axios
                 .post('/api/v1/checkout/', data)
                 .then(response => {
@@ -231,7 +235,7 @@ export default {
                 })
                 .catch(error => {
                     this.errors.push('Something went wrong. Please try again')
-                    console.log(error)
+                    console.log(error.response)
                 })
                 this.$store.commit('setIsLoading', false)
         }
