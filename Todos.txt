@@ -52,3 +52,21 @@
         - sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/djackets djackets
         - virtualenv environment_3_8_2
         - source environment_3_8_2/bin/activate
+
+-> back to VSCode
+- pip freeze (list packages installed)
+
+-> to teminal (digitalocean)
+- touch req.txt
+- vi req.txt
+- paste list copied packages
+- :wq (type)
+- pip install -r req.txt
+- pip install psycopg2-binary
+
+-> back to VSCode
+- zip -r djackets_django.zip djackets_django (Folder Path(Djackets))
+- scp -r djackets_django.zip root@159.223.144.209:.
+
+-> to terminal (digitalocean)
+- cp /root/djackets_django.zip.  !!ติด https://youtu.be/Yg5zkd9nm6w?t=8727
