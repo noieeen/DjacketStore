@@ -1,0 +1,43 @@
+- create and install Django --DONE
+- install Vue and run --DONE
+- install Font Awesome --DONE
+- set Base Template --DONE
+- create django app and models for products --DONE
+- create serializer and views for the products --DONE
+- create simple front page --DONE
+- view product --DONE
+    - create viewset in django
+    - create view page for showing product
+    - add link to detail page
+- sette opp Vuex / State --DONE
+- make it possible to add to cart
+    - add functionality to vuex
+    - initialize store in app.vue
+    - add button to produt page
+    - show a toast message
+- implement a loading bar --DONE  ##https://youtu.be/Yg5zkd9nm6w?t=4030
+- set title --DONE
+- view product on category --Done
+- search --DONE
+- have cart --DONE
+- manage cart items --DONE https://youtu.be/Yg5zkd9nm6w?t=5918
+- sign up --DONE
+- log in --DONE
+- my account --DONE
+- proceed to checkout --DONE
+- create a simple success page
+- setup strip --DONE
+- show my orders --DONE
+
+- deploy Django --DONE
+    - create server (digital ocean) => subscription $4/m
+    - install software
+        - sudo apt-get update
+        - sudo apt-get upgrade
+        - sudo apt install python3-pip python3-dev libpq-dev postgresql-contrib nginx
+        - sudo apt install certbot python3-certbot-nginx
+
+    - create postgres database
+        - sudo -u postgres psql
+            - CREATE DATABASE djackets;
+            - CREATE USER djacketsuser WITH PASSWORD 'djacketspassword';
