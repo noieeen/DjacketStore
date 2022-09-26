@@ -41,3 +41,14 @@
         - sudo -u postgres psql
             - CREATE DATABASE djackets;
             - CREATE USER djacketsuser WITH PASSWORD 'djacketspassword';
+            - ALTER ROLE djacketsuser SET client_encoding TO 'utf8';
+            - GRANT ALL PRIVILEGES ON DATABASE djackets TO djacketsuser;
+            - \q
+        - sudo -H pip3 install --upgrade pip
+        - sudo -H pip3 install virtualenv
+        - mkdir -p /webapps/djackets
+        - cd /webapps/djackets/
+        - sudo groupadd --system webapps
+        - sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/djackets djackets
+        - virtualenv environment_3_8_2
+        - source environment_3_8_2/bin/activate
