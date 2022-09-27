@@ -69,4 +69,5 @@
 - scp -r djackets_django.zip root@159.223.144.209:.
 
 -> to terminal (digitalocean)
-- cp /root/djackets_django.zip.  !!ติด https://youtu.be/Yg5zkd9nm6w?t=8727
+- cp /root/djackets_django.zip .  !!ต้องเว้นจุด( .) https://youtu.be/Yg5zkd9nm6w?t=8727
+- apt install unzip
