@@ -133,3 +133,83 @@
         --log-file=-
 
 - chmod +x environment_3_8_2/bin/gunicorn_start
+- cd environment_3_8_2/bin/
+- ./gunicorn_start (run gunicorn)
+- (environment_3_8_2) root@Django-Store:/webapps/djackets/environment_3_8_2/bin# apt install supervisor
+- cd /etc/supervisor/conf.d
+- touch djackets.conf
+- vi djackets.conf
+        [program:djackets_django]
+        command = /webapps/djackets/environment_3_8_2/bin/gunicorn_start
+        user = djackets
+        stdout_logfile = /webapps/djackets/environment_3_8_2/logs/supervisor.log
+        redirect_stderr = true
+        environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+
+    - save and exit (:wq)
+
+- mkdir /webapps/djackets/environment_3_8_2/logs
+- supervisorctl reread
+- supervisorctl update
+- supervisorctl status
+- supervisorctl status
+
+->install nginx
+- cd /etc/nginx/sites-available/
+- vi apidjackets.codewithnoie
+        upstream djackets_app_server {
+            server unix:/webapps/djackets/environment_3_8_2/run/gunicorn.sock fail_timeout=0;
+        }
+
+        server {
+            listen 80;
+            server_name apidjackets.codewithnoie.com;
+            return 301 https://apidjackets.codewithnoie.com$request_uri;
+        }
+
+        server {
+            listen 443 ssl;
+            server_name apidjackets.codewithnoie.com;
+
+            client_max_body_size 4G;
+
+            access_log /webapps/djackets/environment_3_8_2/logs/nginx-django-access.log;
+            error_log /webapps/djackets/environment_3_8_2/logs/nginx-django-error.log;
+
+            ssl_certificate /etc/letsencrypt/live/apidjackets.codewithnoie.com/fullchain.pem;
+            ssl_certificate_key /etc/letsencrypt/live/apidjackets.codewithnoie.com/privkey.pem;
+
+            ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+            ssl_prefer_server_ciphers on;
+            ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+
+            location /static/ {
+                alias /webapps/djackets//environment_3_8_2/djackets/static/;
+            }
+
+            location /media/ {
+                alias /webapps/djackets/djackets_django/media/;
+            }
+
+            location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+                proxy_set_header Host $http_host;
+
+                proxy_redirect off;
+
+                if (!-f $request_filename) {
+                    proxy_pass http://djackets_app_server;
+                }
+            }
+        }
+
+- cd ../sites-enabled/
+- ln -s ../sites-available/apidjackets.codewithnoie.com .
+- ls -larth
+- (environment_3_8_2) root@Django-Store:/etc/nginx/sites-enabled# service nginx restart
+- systemctl status nginx.service (debug error)
+- sudo certbot --nginx -d apidjackets.codewithnoie.com ->(error, must new cert)
+- rm apidjackets.codewithnoie.com
+- sudo certbot -d apidjackets.codewithnoie.com
+
